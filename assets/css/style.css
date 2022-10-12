@@ -1,9 +1,3 @@
-﻿@charset "UTF-8"; /*!
-Theme Name: Sandbox - Modern & Multipurpose Bootstrap 5 Template
-Theme URI:	https://sandbox.elemisthemes.com/
-Version:	3.2.1
-Author:		elemis
-*/
 @import url(../../css2);
 :root {
   --bs-gray-100: #fefefe;
@@ -40331,4 +40325,3 @@ footer.bg-dark.angled.lower-start:after,
 footer.bg-dark.angled.upper-start:before {
   border-left-color: #21262c !important;
 }
-/*# sourceMappingURL=style.css.map */
