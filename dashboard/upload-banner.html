@@ -22,19 +22,6 @@
           <a class="navbar-brand brand-logo-mini" href="index.html"><img src="https://firebasestorage.googleapis.com/v0/b/intricate-aria-345510.appspot.com/o/bumblebeesAssets%2FImages%2FLogo%2FfileLogo3.png?alt=media&token=be30fedd-121d-43e7-8cbd-a0f184325f61" alt="logo" /></a>
         </div>
         <div class="navbar-menu-wrapper d-flex align-items-stretch">
-          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
-            <span class="mdi mdi-menu"></span>
-          </button>
-          <div class="search-field d-none d-md-block">
-            <form class="d-flex align-items-center h-100" action="#">
-              <div class="input-group">
-                <div class="input-group-prepend bg-transparent">
-                  <i class="input-group-text border-0 mdi mdi-magnify"></i>
-                </div>
-                <input type="text" class="form-control bg-transparent border-0" placeholder="Search projects">
-              </div>
-            </form>
-          </div>
           <ul class="navbar-nav navbar-nav-right">
             <li class="nav-item nav-profile dropdown">
               <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
@@ -77,45 +64,165 @@
       </nav> 
 
 
-      <!-- inner options -->
+      <br>
+      <br>
+      <br>
+      <br>
 
-      <div class="container-fluid page-body-wrapper">
-        <!-- partial:partials/_sidebar.html -->
-        <nav class="sidebar sidebar-offcanvas" id="sidebar">
-          <ul class="nav">
-            <li class="nav-item">
-              <a class="nav-link" href="./analytics.html">
-                <span class="menu-title"><b>Analytics</b></span>
-                <i class="mdi mdi-home menu-icon"></i>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="./upload-banner.html">
-                <span class="menu-title"><b>Upload Banner</b></span>
-                
-                <i class="mdi mdi-cloud-upload-outline menu-icon"></i>
-              </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-                  <span class="menu-title"><b>Blogs</b></span>
-                  
-                  <i class="mdi mdi-blogger menu-icon"></i>
-                </a>
-              </li>
-          </ul>
-        </nav>
+      <div class="row">
+        <div class="col-12 grid-margin">
+          <div class="card">
+           <div class="card-body">
+            
+            
+            <img class="Selectimg" id="myimg"> <label id="upprogress"></label><br><br>
+            <br>
+            <br>
+            <label>Image Name</label>
+            <input type="text" id=namebox>
+
+            <label id="extlab"></label> <br><br>
+
+            <button id="selbtn">Select Image</button>
+            <button id="upbtn">upload Image</button>
+            <button id="downbtn">Retrieve Images</button>
+           </div>
+          </div>
+        </div>
+      </div>
+
+
+      <style>
+        .Selectimg{
+             height: 200px;
+             width: 200px;
+             border: 2px black solid;
+        }
+      </style>
+
+
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
+    
+    const firebaseConfig = {
+      apiKey: "AIzaSyAPOX2_fOrAYdyhwSy-Ofcrf7Y6kFyu71s",
+      authDomain: "intricate-aria-345510.firebaseapp.com",
+      databaseURL: "https://intricate-aria-345510-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "intricate-aria-345510",
+      storageBucket: "intricate-aria-345510.appspot.com",
+      messagingSenderId: "227588324050",
+      appId: "1:227588324050:web:611857e7724afba8268b0b",
+      measurementId: "G-TCRXEE0ZEB"
+    };
+    const app = initializeApp(firebaseConfig);
+
+    import {getStorage, ref as sRef, getDownloadURL, uploadBytesResumable} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-storage.js"
+
+    // variables and referances
+
+    var files = [];
+    var reader = new FileReader();
+
+    var namebox = document.getElementById('namebox');
+    var extlab = document.getElementById('extlab');
+    var myimg = document.getElementById('myimg');
+    var proglab = document.getElementById('upprogress');
+    var SelBtn = document.getElementById('selbtn');
+    var UpBtn = document.getElementById('upbtn');
+    var DownBtn = document.getElementById('downbtn');
+    
+
+    var input = document.createElement('input');
+    input.type = 'file';
+
+    input.onchange = e =>{
+        files = e.target.files;
+
+        var extention = GetFileExt(files[0]);
+        var name = GetFileName(files[0]);
+
+        namebox.value = name;
+        extlab.innerHTML = extention;
+
+        reader.readAsDataURL(files[0]);
+    }
+
+    reader.onload = function() {
+
+        myimg.src = reader.result;
+
+    };
+
+    // selection
+
+    SelBtn.onclick = function() {
+        input.click();
+    };
+
+    function GetFileExt(file) {
+        var temp = file.name.split('.');
+        var ext = temp.slice((temp.length-1),(temp.length));
+        return '.' + ext[0];
+
+    };
+
+    function GetFileName(file) {
+
+        var temp = file.name.split('.');
+        var fname = temp.slice(0,-1).join('.');
+        return fname;
+
+    };
+
+
+    // upload process
+
+    async function UploadProcess() {
+        var ImgToUpload = files[0];
+        var ImgName = namebox.value + extlab.innerHTML;
+        var setProgresspercent;
+
+        const metaData = {
+            contentType: ImgToUpload.type
+        }
+
+        const storage = getStorage();
+        const storageRef = sRef(storage,"AdBanners/"+ImgName);
+
+        const UploadTask = uploadBytesResumable(storageRef, ImgToUpload, metaData);
+
+        uploadTask.on("state_changed",
+      (snapshot) => {
+        var progress =
+          Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+        setProgresspercent(progress);
+      },
+        (error) => {
+        alert(error);
+      },
+
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              setImgUrl(downloadURL)
+          });
+        });
+    };
+
+    UpBtn.onclick = UploadProcess;
     
 
 
+  </script>
 
 
-  
   
 
   
     <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-auth.js"></script>
+    
+    
     <script src="../Utility/Firebase/firebaseConfig.js"></script>
     <script src="./assets/javascript/dashboard.js"></script>
     <script src="./assets/vendors/js/vendor.bundle.base.js"></script>
@@ -126,32 +233,8 @@
     <script src="./assets/js/misc.js"></script>
     <script src="./assets/js/dashboard.js"></script>
     <script src="./assets/js/todolist.js"></script>
+
+
 </body>
 </html>
 
-
-<!-- <div class="dropdown">
-    <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
-        <div class="user-menu d-flex">
-            <div class="user-name text-end me-3">
-                <h6 class="mb-0 text-gray-600">Administrator</h6>
-                <p class="mb-0 text-sm text-gray-600"><span id="user" class="message">Hello, <email-id></Email-id></span></p>
-            </div>
-            <div class="user-img d-flex align-items-center">
-                <div class="avatar avatar-md">
-                    <img src="./images/man.png">
-                </div>
-            </div>
-        </div>
-    </a>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-        <li>
-            <h6 class="dropdown-header">Hello, Admin!</h6>
-        </li>
-        <li><a class="dropdown-item" href="#"><i class="icon-mid bi bi-person me-2"></i> My
-                Profile</a></li>
-       
-    </ul>
-
-    <a name="" id="" class="btn btn-primary" onclick="logout()" href="#" role="button">Button</a>
-</div> -->
