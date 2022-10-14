@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ﻿
+=======
+@import url(../../css2);
+>>>>>>> a9bec610023fbb95ad9edd15260a765d17a9ff42
 :root {
   --bs-gray-100: #fefefe;
   --bs-gray-200: #f6f7f9;
@@ -40325,4 +40329,7 @@ footer.bg-dark.angled.lower-start:after,
 footer.bg-dark.angled.upper-start:before {
   border-left-color: #21262c !important;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> a9bec610023fbb95ad9edd15260a765d17a9ff42
