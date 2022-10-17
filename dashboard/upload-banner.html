@@ -106,14 +106,14 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
     
     const firebaseConfig = {
-      apiKey: "AIzaSyAPOX2_fOrAYdyhwSy-Ofcrf7Y6kFyu71s",
-      authDomain: "intricate-aria-345510.firebaseapp.com",
-      databaseURL: "https://intricate-aria-345510-default-rtdb.asia-southeast1.firebasedatabase.app",
-      projectId: "intricate-aria-345510",
-      storageBucket: "intricate-aria-345510.appspot.com",
-      messagingSenderId: "227588324050",
-      appId: "1:227588324050:web:611857e7724afba8268b0b",
-      measurementId: "G-TCRXEE0ZEB"
+      apiKey: "AIzaSyDVVWLah77CZOVjBqBweWbuPJpnhrHVg_Y",
+      authDomain: "portfolio-4bf1c.firebaseapp.com",
+      databaseURL: "https://portfolio-4bf1c-default-rtdb.firebaseio.com",
+      projectId: "portfolio-4bf1c",
+      storageBucket: "portfolio-4bf1c.appspot.com",
+      messagingSenderId: "296534124626",
+      appId: "1:296534124626:web:133b828c2ecffa7d4f978b",
+      measurementId: "G-EQ2J4C5ZGP"
     };
     const app = initializeApp(firebaseConfig);
 
@@ -181,7 +181,7 @@
     async function UploadProcess() {
         var ImgToUpload = files[0];
         var ImgName = namebox.value + extlab.innerHTML;
-        var setProgresspercent;
+
 
         const metaData = {
             contentType: ImgToUpload.type
@@ -196,15 +196,17 @@
       (snapshot) => {
         var progress =
           Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-        setProgresspercent(progress);
+        proglab.innerHTML = "UPLOADING " + progress + "%"
       },
         (error) => {
-        alert(error);
+        alert("error : Image Not Uploaded", error);
       },
 
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              setImgUrl(downloadURL)
+             
+              console.log(downloadURL);
+
           });
         });
     };
@@ -219,8 +221,11 @@
   
 
   
-    <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-auth.js"></script>
+        
+  <script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-storage.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.12.1/firebase-database.js"></script>
     
     
     <script src="../Utility/Firebase/firebaseConfig.js"></script>
